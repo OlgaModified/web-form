@@ -2,7 +2,7 @@
   <h3>Vue & SignupForm </h3>
 
     <div>
-    <form action="#">
+    <form @submit.prevent="handleSubmit">
 
         <label for="name">Full Name</label>
         <input type="text" id="name" name="name" placeholder="Your full name.." required v-model="name">
@@ -12,6 +12,7 @@
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="Your password.." required v-model="password">
+        <div class="error" v-if="passwordError">{{ passwordError}}</div>
 
         <label for="country">Country</label>
         <select id="country" name="country" required v-model="country">
@@ -21,7 +22,7 @@
         </select>
 
         <label for="skills">Skills</label>
-        <input type="text" @keyup.alt="addSkill" required v-model="tempSkill">
+        <input type="text" @keyup.alt="addSkill" v-model="tempSkill">
         
         <ul v-for="skill in skills" :key="skill" class="a">
           <li @click="deleteListItem(skill)" >{{ skill }}</li>  
@@ -36,15 +37,15 @@
 
         <label class="container title"> favorite animals </label>
         <label class="container">Dogs
-          <input type="checkbox" value="dogs" required v-model="animals">
+          <input type="checkbox" value="dogs" v-model="animals">
           <span class="checkmark checkbox"></span>
         </label>
         <label class="container">Cats
-          <input type="checkbox" value="cats" required v-model="animals">
+          <input type="checkbox" value="cats" v-model="animals">
           <span class="checkmark checkbox"></span>
         </label>
         <label class="container">Birds
-          <input type="checkbox" value="birds" required v-model="animals">
+          <input type="checkbox" value="birds" v-model="animals">
           <span class="checkmark checkbox"></span>
         </label>
 
@@ -77,6 +78,7 @@ export default {
         return {
             email: '',
             password: '',
+            passwordError: '',
             name: '',
             country: '',
             animals: [],            
@@ -100,6 +102,20 @@ export default {
         var index = this.skills.indexOf(item);
         if (index > -1) {
           this.skills.splice(index, 1);
+        }
+      },
+      handleSubmit() {
+        //console.log('Submit form')
+        //validate password
+        this.passwordError = this.password.length >5 ? '' : 'Password must be at least 6 chars long'
+        if(!this.passwordError) {
+          console.log('Contact:', this.name)
+          console.log('Email:', this.email)
+          console.log('Password:', this.password)
+          console.log('Skills:', this.skills)
+          console.log('Terms accepted:', this.terms)
+          console.log('Favorite animals:', this.animals)
+          console.log('Day Time:', this.daytime)
         }
       }
     }
@@ -230,5 +246,13 @@ input[type=submit]:hover {
 ul.a {
   list-style-type: square;
 }
+/* Error message */
+.error {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 10px;
+  color: red;
+}
+
 
 </style>
